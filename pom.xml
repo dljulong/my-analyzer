@@ -1,0 +1,174 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.wltea.ik-analyzer</groupId>
+  <artifactId>my-analyzer</artifactId>
+  <version>5.x</version>
+  <packaging>jar</packaging>
+
+  <name>my-analyzer</name>
+  <url>https://github.com/dljulong/my-analyzer/</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <lucene.version>5.5.0</lucene.version>
+
+    <javac.src.version>1.7</javac.src.version>
+    <javac.target.version>1.7</javac.target.version>
+    <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>${lucene.version}</version>
+    </dependency>
+ 
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queryparser</artifactId>
+      <version>${lucene.version}</version>
+    </dependency>
+ 
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-common</artifactId>
+      <version>${lucene.version}</version>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.9.7</version>
+    </dependency>
+    -->
+    <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.51</version>
+    </dependency>
+
+
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+	<configuration>
+	  <target>${javac.src.version}</target>
+	  <source>${javac.target.version}</source>
+        </configuration>
+        <version>${maven.compiler.plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+    <repository>
+      <id>${env.dm.repository.id}</id>
+      <url>${env.dm.repository.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${env.dm.snapshotRepository.id}</id>
+      <url>${env.dm.snapshotRepository.url}</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <env.filter>local</env.filter>
+        <env.dm.repository.id>maven-release</env.dm.repository.id>
+        <env.dm.repository.url>http://172.16.3.193:8081/nexus/content/repositories/releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>maven-snapshot</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://172.16.3.193:8081/nexus/content/repositories/snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <env.filter>dev</env.filter>
+        <env.dm.repository.id>maven-release</env.dm.repository.id>
+        <env.dm.repository.url>http://172.16.3.193:8081/nexus/content/repositories/releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>maven-snapshot</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://172.16.3.193:8081/nexus/content/repositories/snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>test</id>
+      <properties>
+        <env.filter>test</env.filter>
+        <env.dm.repository.id>maven-release</env.dm.repository.id>
+        <env.dm.repository.url>http://172.16.3.193:8081/nexus/content/repositories/releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>maven-snapshot</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://172.16.3.193:8081/nexus/content/repositories/snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <!-- 集成环境 -->
+    <profile>
+      <id>integration</id>
+      <properties>
+        <env.filter>integration</env.filter>
+        <env.dm.repository.id>jldata-releases</env.dm.repository.id>
+        <env.dm.repository.url>http://192.168.50.20:8081/repository/jldata-releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>jldata-snapshots</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://192.168.50.20:8081/repository/jldata-snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <!-- 集成测试环境 -->
+    <profile>
+      <id>integration-test</id>
+      <properties>
+        <env.filter>integration-test</env.filter>
+        <env.dm.repository.id>jldata-releases</env.dm.repository.id>
+        <env.dm.repository.url>http://192.168.50.20:8081/repository/jldata-releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>jldata-snapshots</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://192.168.50.20:8081/repository/jldata-snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <!--预上线 -->
+      <id>staging</id>
+      <properties>
+        <env.filter>staging</env.filter>
+        <env.dm.repository.id>jldata-releases</env.dm.repository.id>
+        <env.dm.repository.url>http://192.168.50.20:8081/repository/jldata-releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>jldata-snapshots</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://192.168.50.20:8081/repository/jldata-snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+    <profile>
+      <!--正式环境 -->
+      <id>production</id>
+      <properties>
+        <env.filter>production</env.filter>
+        <env.dm.repository.id>jldata-releases</env.dm.repository.id>
+        <env.dm.repository.url>http://192.168.50.20:8081/repository/jldata-releases/</env.dm.repository.url>
+        <env.dm.snapshotRepository.id>jldata-snapshots</env.dm.snapshotRepository.id>
+        <env.dm.snapshotRepository.url>http://192.168.50.20:8081/repository/jldata-snapshots/</env.dm.snapshotRepository.url>
+      </properties>
+    </profile>
+  </profiles>
+</project>
+  
